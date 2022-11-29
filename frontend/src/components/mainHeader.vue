@@ -5,6 +5,7 @@
         v-for="nav in menu"
         :key="nav.title"
         :to="{ name: nav.path }"
+        class="nav__item"
       >{{nav.title}}</router-link>
     </nav>
   </header>
@@ -19,7 +20,7 @@
       const state = reactive({
         menu: [
           { title: "Home", path: "home" },
-          { title: "Write", path: "home" },
+          { title: "Write", path: "write" },
         ],
       })
 
@@ -32,8 +33,21 @@
 
 <style lang="scss" scoped>
   .main-header {
-    height: 40px;
     padding: 0 24px;
     background-color: $primary-main;
+  }
+  .main-nav {
+    @include flex;
+    
+    gap: 8px;
+    padding: 8px 0;
+
+    .nav__item {
+      padding: 2px 8px;
+
+      &:hover {
+        font-weight: $font-b;
+      }
+    }
   }
 </style>

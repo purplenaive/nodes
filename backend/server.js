@@ -1,6 +1,9 @@
 const express = require("express");
 const app = express();
 
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+
 app.listen(3000, function() {
   console.log("listening on 3000");
 });
@@ -9,9 +12,8 @@ app.listen(3000, function() {
 app.get("/", function(request, response) {
   response.sendFile(__dirname + "/index.html");
 });
-app.get("/pet", function(request, response) {
-  response.send("펫 용품을 쇼핑할 수 있는 사이트 입니다.");
-});
-app.get("/beauty", function(request, response) {
-  response.send("뷰티 용품을 쇼핑할 수 있는 사이트입니다.");
+
+app.post("/api/add", function(request, response) {
+  console.log(request.body);
+  response.send("complete");
 });
