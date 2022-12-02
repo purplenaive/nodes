@@ -37,7 +37,7 @@
 
     width: 100%;
     border-radius: 8px;
-    padding: 8px;
+    padding: 12px 16px 12px 12px;
     background-color: #eeeeee;
 
     .memo__content {
