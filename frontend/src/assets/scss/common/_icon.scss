@@ -1,0 +1,70 @@
+@use "sass:list";
+
+$icon-list: null;
+
+@function icon($name: "transparent", $color: #000000) {
+  $color-value: str-slice("#{$color}", 2);
+
+  $icon-list: (
+    "transparent": transparent,
+    "trash-can": "data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' fill='none' viewBox='0 0 18 18'%3e%3cg stroke='%23#{$color-value}' stroke-linejoin='round'%3e%3cpath d='m14 6-1 10H5L4 6m10 0H4m10 0h1V4h-3M4 6H3V4h3m0 0a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2M6 4h6'/%3e%3cpath stroke-linecap='round' d='m6.5 8 .5 6m2 0V8m2.5 0-.5 6'/%3e%3c/g%3e%3c/svg%3e",
+    // "": "",
+  ) !global;
+
+  @return map-get($icon-list, $name);
+}
+$primary-list: (trash-can);
+
+@mixin icon-custom($size) {
+  width: $size + px;
+  height: $size + px;
+}
+
+.icon {
+  display: block;
+  width: 24px;
+  height: 24px;
+  background: icon(transparent) no-repeat center center;
+  background-size: contain;
+
+  &.icon--disabled {
+    opacity: 0.4;
+  }
+
+  &.small {
+    width: 18px;
+    height: 18px;
+  }
+  &.large {
+    width: 36px;
+    height: 36px
+  }
+  &.xl {
+    width: 48px;
+    height: 48px;
+  }
+
+  @each $key, $value in $icon-list {
+    &.#{$key} {
+      @if $value == transparent {
+        background-image: unset;
+      } @else {
+        background-image: url($value);
+        
+        @if list.index($primary-list, $key) {
+          &.primary { background-image: url( "#{icon($key, $primary-main)}" ); }
+        }
+      }
+    }
+  }
+}
+
+button {
+
+  &:disabled {
+
+    .icon {
+      opacity: 0.4;
+    }
+  }
+}

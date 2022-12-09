@@ -33,9 +33,24 @@ app.get("/api/todos", function(request, response) {
 app.post("/api/add", function(request, response) {
   const { title, date } = request.body;
 
-  db.collection("post").insertOne({ title, date }, function(error, result) {
-    if(error) console.log("data save in post got error");
-  })
+  db.collection("counter").findOne({ name: "게시물 개수" }, function(error, result) {
+    const counter = result.totalPost;
+
+    db.collection("post").insertOne({ _id: counter + 1, title, date }, function(error, result) {
+      if(error) return console.log("data save in post got error", error); 
+  
+      db.collection("counter").updateOne({ name: "게시물 개수" }, { $inc : { totalPost: 1 } });
+    })
+  });
 
   response.send("complete");
+});
+
+// delete todo item
+app.delete("/api/delete", function(request, response) {
+  db.collection("post").deleteOne(request.body, function(error, result) {
+    if(error) return console("delete memo got error", error);
+  })
+
+  response.status(200).send("delete complete");
 });

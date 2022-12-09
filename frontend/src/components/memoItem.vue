@@ -11,11 +11,17 @@
 
     <div class="memo__actions">
       <input type="checkbox" name="todos" :id="memo._id" class="memo__checkbox">
+      <button class="delete-memo-button" @click="deleteMemo(memo._id)">
+        <span class="button__text sr-only">삭제하기</span>
+        <i class="icon trash-can primary"></i>
+      </button>
     </div>
   </label>
 </template>
 
 <script>
+  import axios from "axios";
+
   export default {
     name: "memoItem",
     props: {
@@ -23,11 +29,30 @@
         type: Array,
         default: [],
       },
-      wrapper: {
-        type: String,
-        default: "li",
-      }
     },
+    emits: ["deleteSuccess", ],
+    setup(props, {emit}) {
+      // 메모 삭제하기
+      const deleteMemo = function(id) {
+        axios({
+          method: "delete",
+          url: "/api/delete",
+          data: {
+            _id: id,
+          }
+        })
+          .then(response => {
+            emit("deleteSuccess");
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      };
+
+      return {
+        deleteMemo,
+      }
+    }
   }
 </script>
 
@@ -40,8 +65,16 @@
     padding: 12px 16px 12px 12px;
     background-color: #eeeeee;
 
+    &:hover {
+      
+      .delete-memo-button {
+        opacity: 1;
+        transition: opacity .3s ease;
+      }
+    }
+
     .memo__content {
-      width: calc(100% - 24px);
+      width: calc(100% - 80px);
 
       .memo__date {
         font-weight: $font-md;
@@ -51,13 +84,21 @@
     }
 
     .memo__actions {
+      @include flex(false, row-reverse, nowrap, flex-end, center);
+
       justify-self: flex-end;
       margin-left: auto;
+      gap: 16px;
       
       .memo__checkbox {
         appearance: checkbox;
         accent-color: $primary-main;
       }
+    }
+    .delete-memo-button {
+      opacity: 0;
+      aspect-ratio: 1 / 1;
+      transition: opacity .3s ease;
     }
   }
 </style>

@@ -1,7 +1,10 @@
 <template>
   <main class="page home-page">
     <div class="todo-list">
-      <memo-item :data="todos" wrapper="li"></memo-item>
+      <memo-item 
+        :data="todos" 
+        @deleteSuccess="getTodos"
+      ></memo-item>
     </div>
   </main>
 </template>
@@ -29,6 +32,7 @@
 
       return {
         ...toRefs(state),
+        getTodos,
       }
     }
   }
