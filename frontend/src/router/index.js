@@ -13,6 +13,11 @@ const router = createRouter({
       name: "write",
       component: () => import("../views/writeView.vue")
     },
+    {
+      path: "/memo/:id",
+      name: "memo",
+      component: () => import("../views/detailView.vue")
+    },
   ]
 })
 

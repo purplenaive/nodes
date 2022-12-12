@@ -29,6 +29,14 @@ app.get("/api/todos", function(request, response) {
   })
 });
 
+// memo detail data
+app.get("/api/memo/:id", function(request, response) {
+  db.collection("post").findOne({ _id: parseInt(request.params.id) }, function(error, result) {
+    if(error) return console.log("detail memo got error", error);
+    
+    response.send(result);
+  })
+})
 // add todo item
 app.post("/api/add", function(request, response) {
   const { title, date } = request.body;
@@ -50,7 +58,17 @@ app.post("/api/add", function(request, response) {
 app.delete("/api/delete", function(request, response) {
   db.collection("post").deleteOne(request.body, function(error, result) {
     if(error) return console("delete memo got error", error);
+    response.status(200).send("delete complete");
   })
-
-  response.status(200).send("delete complete");
 });
+
+// modify todo item
+app.patch("/api/modify", function(request, response) {
+  const { _id, title, date } = request.body;
+
+  db.collection("post").updateOne({ _id: parseInt(_id) }, { $set: { title, date} }, function(error, result) {
+    if(error) return console.log("modify memo got error");
+
+    response.status(200).send("modify complete");
+  })
+})

@@ -13,8 +13,17 @@
   min-width: 80px;
   border-radius: 8px;
   font-size: 16px;
+  font-family: $font;
+  padding: 0 16px;
   transition: background-color .3s ease;
   background: $primary-main;
+
+  // outline
+  &.button--outline {
+    border: 1px solid $primary-main;
+    color: $primary-main;
+    background-color: white;
+  }
 
   &:active {
     transition: background-color .3s ease;

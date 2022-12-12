@@ -2,6 +2,7 @@
   <label 
     v-for="memo in data"
     :key="memo._id"
+    :id="`memo-${memo._id}`"
     class="component memo-item"
   >
     <div class="memo__content">
@@ -11,10 +12,17 @@
 
     <div class="memo__actions">
       <input type="checkbox" name="todos" :id="memo._id" class="memo__checkbox">
-      <button class="delete-memo-button" @click="deleteMemo(memo._id)">
+      <button 
+        class="delete-memo-button" 
+        @click="deleteMemo(memo._id)"
+      >
         <span class="button__text sr-only">삭제하기</span>
         <i class="icon trash-can primary"></i>
       </button>
+      <router-link class="view-detail-button" :to="`/memo/${memo._id}`">
+        <span class="sr-only button__text">자세히 보기</span>
+        <i class="icon paper primary"></i>
+      </router-link>
     </div>
   </label>
 </template>
@@ -30,7 +38,6 @@
         default: [],
       },
     },
-    emits: ["deleteSuccess", ],
     setup(props, {emit}) {
       // 메모 삭제하기
       const deleteMemo = function(id) {
@@ -42,7 +49,7 @@
           }
         })
           .then(response => {
-            emit("deleteSuccess");
+            document.getElementById("memo-" + id).style.display = "none";
           })
           .catch(error => {
             console.log(error);
@@ -67,7 +74,8 @@
 
     &:hover {
       
-      .delete-memo-button {
+      .delete-memo-button,
+      .view-detail-button {
         opacity: 1;
         transition: opacity .3s ease;
       }
@@ -95,7 +103,8 @@
         accent-color: $primary-main;
       }
     }
-    .delete-memo-button {
+    .delete-memo-button,
+    .view-detail-button {
       opacity: 0;
       aspect-ratio: 1 / 1;
       transition: opacity .3s ease;

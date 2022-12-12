@@ -3,7 +3,6 @@
     <div class="todo-list">
       <memo-item 
         :data="todos" 
-        @deleteSuccess="getTodos"
       ></memo-item>
     </div>
   </main>

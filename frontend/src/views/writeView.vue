@@ -63,4 +63,8 @@
       }
     }
   }
+
+  .form__actions {
+    @include flex(false, row, nowrap, flex-end, center);
+  }
 </style>
