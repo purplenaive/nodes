@@ -72,3 +72,42 @@ app.patch("/api/modify", function(request, response) {
     response.status(200).send("modify complete");
   })
 })
+
+const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
+const session = require("express-session");
+
+app.use(session({ secret: "비밀코드", resave: true, saveUninitialized: false }));
+app.use(passport.initialize());
+app.use(passport.session());
+
+// 로그인 시도시
+app.post("/api/login", passport.authenticate("local", {
+  failureRedirect: "/fail"
+}), function(request, response) {
+  response.status(200).send("login success");
+});
+
+passport.use(new LocalStrategy({
+  usernameField: "id",
+  passwordField: "password",
+  session: true,
+  passReqToCallback: false,
+}, function(id, password, done) {
+  db.collection("login").findOne({ id: id }, function(error, result) {
+    if(error) return done(error);
+    if(!result) return done(null, false, { message: "아이디가 존재하지 않습니다" })
+    if(password == result.password) {
+      return done(null, result);
+    } else {
+      return done(null, false, { message: "비밀번호가 일치하지 않습니다" })
+    }
+  })
+}));
+
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+passport.deserializeUser(function(id, done) {
+  done(null, {});
+})

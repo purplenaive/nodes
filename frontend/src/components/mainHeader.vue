@@ -1,5 +1,5 @@
 <template>
-  <header class="component main-header">
+  <header v-show="route.meta.header_active" class="component main-header">
     <nav class="main-nav">
       <router-link 
         v-for="nav in menu"
@@ -12,11 +12,13 @@
 </template>
 
 <script>
+  import { useRoute } from 'vue-router';
   import { toRefs, reactive } from 'vue';
 
   export default {
     name: "mainHeader",
     setup() {
+      const route = useRoute();
       const state = reactive({
         menu: [
           { title: "Home", path: "home" },
@@ -26,6 +28,7 @@
 
       return {
         ...toRefs(state),
+        route,
       }
     }
   }
